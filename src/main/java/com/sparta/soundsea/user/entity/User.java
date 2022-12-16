@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Getter
-@Entity
+@Entity(name = "users")
 @NoArgsConstructor
 public class User {
     @Id
