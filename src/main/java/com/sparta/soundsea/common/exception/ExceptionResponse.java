@@ -10,7 +10,7 @@ public class ExceptionResponse {
 
     public ExceptionResponse(ExceptionMessage exceptionMessage) {
         this.msg = exceptionMessage.getMsg();
-        this.statusCode = exceptionMessage.getStatus();
+        this.statusCode = exceptionMessage.getStatusCode();
     }
 
     public ExceptionResponse(String msg, int statusCode) {

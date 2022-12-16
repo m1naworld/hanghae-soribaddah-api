@@ -6,7 +6,7 @@ public class Response {
 
     public Response(ResponseMessage responseMessage) {
         this.msg = responseMessage.getMsg();
-        this.statusCode = responseMessage.getStatus();
+        this.statusCode = responseMessage.getStatusCode();
     }
 
     public Response(String msg, int statusCode) {

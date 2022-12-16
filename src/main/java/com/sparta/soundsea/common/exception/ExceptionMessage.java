@@ -7,11 +7,11 @@ public enum ExceptionMessage {
 
     // common
     INTERNAL_SERVER_ERROR_MSG(500,"서버 에러입니다.");
-    private final int status;
+    private final int statusCode;
     private final String msg;
 
-    ExceptionMessage(final int status, final String msg) {
-        this.status = status;
+    ExceptionMessage(final int statusCode, final String msg) {
+        this.statusCode = statusCode;
         this.msg = msg;
     }
 }
