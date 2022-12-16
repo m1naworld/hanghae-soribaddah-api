@@ -31,10 +31,7 @@ public class User {
     @Column
     private String refreshToken;
 
-
-
-//좋아요
-
-
-
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRole role;
 }
