@@ -13,6 +13,8 @@ public enum ExceptionMessage {
     DUPLICATE_USER_ERROR_MSG(409,"중복된 사용자가 존재합니다."),
     USER_NOT_FOUND_ERROR_MSG(400,"회원을 찾을 수 없습니다!"),
     PASSWORDS_DO_NOT_MATCH_ERROR_MSG(400,"비밀번호가 일치하지 않습니다!"),
+    INVALID_LOGINID_MSG(400,"유효하지 않은 ID 입니다."),
+    INVALID_PASSWORD_MSG(400,"유효하지 않은 PW 입니다."),
 
     // 403 토큰 만료
     EXPIRATION_TOKEN(403, "Access Token이 만료되었습니다"),
