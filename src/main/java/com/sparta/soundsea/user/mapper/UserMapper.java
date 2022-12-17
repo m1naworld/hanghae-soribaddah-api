@@ -3,7 +3,6 @@ package com.sparta.soundsea.user.mapper;
 import com.sparta.soundsea.user.dto.SignUpUserDto;
 import com.sparta.soundsea.user.entity.User;
 import com.sparta.soundsea.user.entity.UserRole;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
