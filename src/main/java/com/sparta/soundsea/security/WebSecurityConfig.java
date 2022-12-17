@@ -1,9 +1,13 @@
 package com.sparta.soundsea.security;
 
+import com.sparta.soundsea.security.jwt.JwtAuthFilter;
+import com.sparta.soundsea.security.jwt.JwtUtil;
+import com.sparta.soundsea.security.jwt.exception.JwtExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -17,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity(debug = true) // Filter 확인을 위해 Debug 설정, 배포 시 옵션 변경
 @RequiredArgsConstructor
 public class WebSecurityConfig {
+    private final JwtUtil jwtUtil;
     @Bean // 비밀번호 암호화
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -40,15 +45,16 @@ public class WebSecurityConfig {
         http.authorizeRequests().
                 // 3-1. Authentication 예외 처리
                 // 3-1-1. SignUp, Login API 인증 예외 처리
-                antMatchers("/signup").permitAll().
-                antMatchers("/login").permitAll().
+                antMatchers("/api/signup").permitAll().
+                antMatchers("/api/login").permitAll().
                 // 3-1-2. music 조회 관련 API 예외 처리
-                antMatchers("/music").permitAll().
-                antMatchers("/music/{path:[0-9]*}").permitAll().
+                antMatchers(HttpMethod.GET, "/api/music*").permitAll().
                 anyRequest().authenticated();
 
         // 4. Filter 등록
         // 4-1. JWT Filter 등록
+        http.addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtExceptionHandlerFilter(), JwtAuthFilter.class);
         // 4-2. OAuth Filter 등록
 
         return http.build();
