@@ -1,5 +1,8 @@
 package com.sparta.soundsea.common.response;
 
+import lombok.Getter;
+
+@Getter
 public class Response {
     private String msg;
     private int statusCode;

@@ -3,6 +3,7 @@ package com.sparta.soundsea.music.entity;
 import com.sparta.soundsea.comment.entity.Comment;
 import com.sparta.soundsea.common.entity.Timestamped;
 import com.sparta.soundsea.user.entity.User;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class Music extends Timestamped {
     @Id
@@ -28,13 +30,11 @@ public class Music extends Timestamped {
     @Column(nullable = false)
     private String image;
 
-    @Column(nullable = false)
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "music", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
 

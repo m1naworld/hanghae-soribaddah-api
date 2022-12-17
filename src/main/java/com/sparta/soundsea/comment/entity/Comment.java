@@ -20,10 +20,11 @@ public class Comment extends Timestamped {
     private String contents;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER_ID", nullable=false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="MUSIC_ID", nullable=false)
     private Music music;
 
 
