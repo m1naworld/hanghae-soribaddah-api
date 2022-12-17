@@ -39,7 +39,10 @@ out/
 gradle
 gradlew
 gradlew.bat
-src/main/resources/application-private.properties
+
+src/main/resources/application-dev.properties
+src/main/resources/application-prod.properties
 
 ### properties about security key ###
 security.properties
+
