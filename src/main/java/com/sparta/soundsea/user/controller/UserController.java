@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 import static com.sparta.soundsea.common.response.ResponseMessage.LOGIN_USER_SUCCESS_MSG;
 import static com.sparta.soundsea.common.response.ResponseMessage.SIGNUP_USER_SUCCESS_MSG;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -26,8 +28,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Response login(@RequestBody RequestLoginUserDto requestLoginUserDto) {
-        userService.login(requestLoginUserDto.toLoginUserDto());
+    public Response login(@RequestBody RequestLoginUserDto requestLoginUserDto, HttpServletResponse response) {
+        userService.login(requestLoginUserDto.toLoginUserDto(), response);
         return new Response(LOGIN_USER_SUCCESS_MSG);
     }
 
