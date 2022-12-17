@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -47,8 +48,7 @@ public class WebSecurityConfig {
                 antMatchers("/api/signup").permitAll().
                 antMatchers("/api/login").permitAll().
                 // 3-1-2. music 조회 관련 API 예외 처리
-                antMatchers("/api/music").permitAll().
-                antMatchers("/api/music/{path:[0-9]*}").permitAll().
+                antMatchers(HttpMethod.GET, "/api/music*").permitAll().
                 anyRequest().authenticated();
 
         // 4. Filter 등록

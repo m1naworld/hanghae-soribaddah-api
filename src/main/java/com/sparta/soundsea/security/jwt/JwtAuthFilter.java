@@ -30,30 +30,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException, CustomSecurityException {
         // Filter가 적용되고 있는 uri 추출
         String uri = request.getRequestURI();
+        String method = request.getMethod();
 
         // Login, SignUp, Music 전체 조회 API의 경우 해당 Filter 건너뜀.
-        if (uri.equals("/api/login") || uri.equals("/api/signup") || uri.equals("/api/music")){
-            System.out.println("JWT Filter Skipped");
+        if (uri.equals("/api/login") || uri.equals("/api/signup")){
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Music 상세정보 확인할 때 Filter 건너뛰기 위함
-        // api/music/ 뒤에 오는 문자열이 숫자로만 구성되어있는지(forum id) 아닌지 판단
-        if (uri.contains("/music")){
-            String[] strarr = uri.split("/");
-            char[] chararr = strarr[strarr.length - 1].toCharArray();
-            boolean flag = false;
-            for (int i = 0; i < chararr.length; i++) {
-                if (chararr[i] < '0' || chararr[i] > '9'){
-                    flag = true;
-                }
-            }
-            if (!flag){
-                System.out.println("JWT Filter Skipped");
-                filterChain.doFilter(request, response);
-                return;
-            }
+        // Music 조회 관련 API 일때 해당 Filter 건너뜀
+        if (uri.contains("/music") && method.equals("GET")){
+            filterChain.doFilter(request, response);
+            return;
         }
 
         // 1. Request에서 토큰 추출
