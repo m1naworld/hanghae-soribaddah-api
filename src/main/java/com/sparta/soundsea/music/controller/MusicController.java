@@ -11,18 +11,20 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import static com.sparta.soundsea.common.response.ResponseMessage.CREATE_MUSIC_SUCCESS_MSG;
 
 @Slf4j
 @RequestMapping("/api/music")
 @RequiredArgsConstructor
+@RestController
 public class MusicController {
 
     private final MusicService musicService;
 
     //추천음악 등록
-    @PostMapping
+    @PostMapping("/new")
     public Response createMusic(@AuthenticationPrincipal CustomUserDetails userDeatils, @RequestBody RequestCreateMusic requestDto){
         //UserDetails에서 userId 뽑아오기
         Long userId = userDeatils.getUser().getId();
