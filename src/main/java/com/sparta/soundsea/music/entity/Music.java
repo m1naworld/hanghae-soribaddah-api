@@ -38,7 +38,13 @@ public class Music extends Timestamped {
     private List<Comment> comments = new ArrayList<>();
 
 
-
+    public Music(String title, String contents, String artist, String image, User user){
+        this.title = title;
+        this.contents = contents;
+        this.artist = artist;
+        this.image = image;
+        this.user = user;
+    }
 
 
 }
