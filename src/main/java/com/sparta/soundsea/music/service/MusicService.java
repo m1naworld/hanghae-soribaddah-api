@@ -49,6 +49,23 @@ public class MusicService {
 
     }
 
+    //음악 전체 조회
+    public List<ResponseMusic> findAllMusic() {
+
+        List<ResponseMusic> allResponseMusic = new ArrayList<>();
+
+        List<Music> allMusic = musicRepository.findAllByOrderByModifiedAtDesc();
+
+        for(Music music : allMusic){
+             allResponseMusic.add(musicMapper.toResponse(music));
+        }
+
+        return allResponseMusic;
+    }
+
+
+
+
     //선택 음악 상세페이지 조회
     @Transactional(readOnly = true)
     public ResponseMusic findOneMusic(Long musicId){

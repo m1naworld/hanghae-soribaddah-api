@@ -11,8 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.sparta.soundsea.common.response.ResponseMessage.CREATE_MUSIC_SUCCESS_MSG;
-import static com.sparta.soundsea.common.response.ResponseMessage.READ_MUSIC_ONE_SUCCESS_MSG;
+import java.util.List;
+
+import static com.sparta.soundsea.common.response.ResponseMessage.*;
 
 @Slf4j
 @RequestMapping("/api/music")
@@ -34,6 +35,18 @@ public class MusicController {
 
         return new Response(CREATE_MUSIC_SUCCESS_MSG);
     }
+
+
+    //음악 전체 조회
+    @GetMapping("")
+    public DataResponse findAllMusic(){
+        List<ResponseMusic> listResponseMusic = musicService.findAllMusic();
+
+        return new DataResponse(READ_MUSIC_ALL_SUCCESS_MSG, listResponseMusic);
+    }
+
+
+
 
 
     //선택 음악 상세페이지 조회
