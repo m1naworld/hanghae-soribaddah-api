@@ -1,9 +1,11 @@
 package com.sparta.soundsea.music.dto;
 
+import com.sparta.soundsea.comment.dto.CommentResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -17,6 +19,6 @@ public class ResponseMusic {
     private String image;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-//    private List<ResponseComment> commentList;
+    private List<CommentResponseDto> commentList;
 
 }
