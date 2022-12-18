@@ -1,6 +1,7 @@
 package com.sparta.soundsea.user.service;
 
 
+import com.sparta.soundsea.security.jwt.JwtUtil;
 import com.sparta.soundsea.user.dto.LoginUserDto;
 import com.sparta.soundsea.user.dto.SignUpUserDto;
 import com.sparta.soundsea.user.entity.User;
@@ -10,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletResponse;
+
 import static com.sparta.soundsea.common.exception.ExceptionMessage.DUPLICATE_USER_ERROR_MSG;
 import static com.sparta.soundsea.common.exception.ExceptionMessage.INVALID_LOGINID_MSG;
 import static com.sparta.soundsea.common.exception.ExceptionMessage.INVALID_PASSWORD_MSG;
@@ -23,6 +27,7 @@ public class UserService {
     private final Validator validator;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Transactional
     public void signUp(SignUpUserDto signUpUserDto) {
@@ -49,7 +54,7 @@ public class UserService {
     }
 
     @Transactional
-    public void login(LoginUserDto loginUserDto) {
+    public void login(LoginUserDto loginUserDto, HttpServletResponse response) {
         // LoginUserDto에서 확인할 Data들
         String loginId = loginUserDto.getLoginId();
         String password = loginUserDto.getPassword();
@@ -66,10 +71,23 @@ public class UserService {
         // 3. Social 로그인인지, 일반 로그인인지 확인
         // 3-1. Social 로그인일 경우
         if (user.getSocial()){
-            // OAuth 토큰 발행
+            // 4. OAuth 토큰 발행
         }
-        // 3-2. 일반 로그인인 경우
-        // JWT 토큰 발급
+
+        if(!user.getSocial()){
+            // 3-2. 일반 로그인인 경우
+            // 4. JWT 토큰 발급
+            // 4-1. Token 생성
+            String accessToken = jwtUtil.createAccessToken(user.getLoginId(), user.getRole());
+            String refreshToken = jwtUtil.createRefreshToken();
+
+            // 4-2. Token 발급
+            response.addHeader(JwtUtil.AUTHORIZATION_ACCESS, accessToken);
+            response.addHeader(JwtUtil.AUTHORIZATION_REFRESH, refreshToken);
+
+            // 5. 발급된 Token DB에 저장
+            user.updateToken(accessToken, refreshToken);
+        }
     }
 
 }
