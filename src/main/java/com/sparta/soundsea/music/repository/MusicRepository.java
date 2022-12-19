@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface MusicRepository extends JpaRepository<Music, Long>{
 
-    List<Music> findAllByOrderByModifiedAtDesc();
+    List<Music> findAllByOrderByLastModifiedAtDesc();
 }

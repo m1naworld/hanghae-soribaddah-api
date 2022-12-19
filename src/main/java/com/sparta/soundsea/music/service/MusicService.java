@@ -54,7 +54,7 @@ public class MusicService {
 
         List<ResponseMusic> allResponseMusic = new ArrayList<>();
 
-        List<Music> allMusic = musicRepository.findAllByOrderByModifiedAtDesc();
+        List<Music> allMusic = musicRepository.findAllByOrderByLastModifiedAtDesc();
 
         for(Music music : allMusic){
              allResponseMusic.add(musicMapper.toResponse(music));
