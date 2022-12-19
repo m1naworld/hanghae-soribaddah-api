@@ -41,13 +41,13 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // 1. CSRF(Cross-site request forgery) 비활성화 설정 및 cors 설정
+        // 1. CSRF(Cross-site request forgery) 비활성화 설정
         http.csrf().disable();
 
         // 2. Session 비활성화
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // 3. Request에 대한 인증/인가
+        // 3. Request에 대한 인증/인가 및 cors 설정
         http.authorizeRequests().
                 // 3-1. Authentication 예외 처리
                 // 3-1-1. SignUp, Login API 인증 예외 처리
@@ -70,7 +70,7 @@ public class WebSecurityConfig {
 
 
 
-    //     cors 설정 filter
+    // cors 설정
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
