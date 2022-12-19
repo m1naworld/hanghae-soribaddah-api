@@ -4,13 +4,11 @@ import com.sparta.soundsea.security.jwt.JwtAuthFilter;
 import com.sparta.soundsea.security.jwt.JwtUtil;
 import com.sparta.soundsea.security.jwt.exception.JwtExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,11 +25,11 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().
-                requestMatchers(PathRequest.toH2Console()); // H2 콘솔 관련된 Path 예외 설정
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().
+////                requestMatchers(PathRequest.toH2Console()); // H2 콘솔 관련된 Path 예외 설정
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -48,7 +46,8 @@ public class WebSecurityConfig {
                 antMatchers("/api/signup").permitAll().
                 antMatchers("/api/login").permitAll().
                 // 3-1-2. music 조회 관련 API 예외 처리
-                antMatchers(HttpMethod.GET, "/api/music*").permitAll().
+                antMatchers(HttpMethod.GET, "/api/music").permitAll().
+                antMatchers(HttpMethod.GET, "/api/music/**").permitAll().
                 anyRequest().authenticated();
 
         // 4. Filter 등록
