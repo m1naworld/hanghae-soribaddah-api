@@ -11,7 +11,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,14 +40,14 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // 1. CSRF(Cross-site request forgery) 비활성화 설정
+        // 1. CSRF(Cross-site request forgery) 비활성화 설정 및 cors 설정
         http.csrf().disable()
                 .cors().configurationSource(corsConfigurationSource());
 
         // 2. Session 비활성화
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // 3. Request에 대한 인증/인가 및 cors 설정
+        // 3. Request에 대한 인증/인가
         http.authorizeRequests().
                 // 3-1. Authentication 예외 처리
                 // 3-1-1. SignUp, Login API 인증 예외 처리
