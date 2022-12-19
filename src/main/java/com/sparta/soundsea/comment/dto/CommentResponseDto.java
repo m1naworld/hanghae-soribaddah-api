@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CommentResponseDto {
 
-
     private Long commentId;
 
     private String loginId;
@@ -32,5 +31,4 @@ public class CommentResponseDto {
 
 
     }
-
 }
