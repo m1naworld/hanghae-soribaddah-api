@@ -50,11 +50,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // 2. Token 유효성 검사 및 인증
         // 2-1. Token 존재 여부 확인
         if(token == null) {
-            throw new CustomSecurityException(INVALID_TOKEN_MSG);
+            throw new CustomSecurityException(TOKEN_NOT_FOUND_MSG);
         }
         // 2-2. Token 유효성 확인
         if(!jwtUtil.validateAccessToken(token, request, response)){
-            throw new CustomSecurityException(TOKEN_NOT_FOUND_MSG);
+            throw new CustomSecurityException(INVALID_TOKEN_MSG);
         }
         // 3. 사용자 인증
         Claims info = jwtUtil.getUserInfoFromHttpServletRequest(request);

@@ -2,8 +2,6 @@ package com.sparta.soundsea.common.exception;
 
 import lombok.Getter;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-
 @Getter
 public enum ExceptionMessage {
 
@@ -21,7 +19,8 @@ public enum ExceptionMessage {
     // JWT, OAuth
     TOKEN_NOT_FOUND_MSG(401,"토큰이 존재하지 않습니다."),
     INVALID_TOKEN_MSG(401,"토큰이 유효하지 않습니다."),
-    REFRESH_TOKEN_NOT_FOUND_MSG(401, "로그아웃 된 사용자입니다"),
+
+    REFRESH_TOKEN_NOT_FOUND_MSG(401, "로그아웃된 사용자입니다."),
     UNAUTHORIZED_USER(403, "인가되지 않은 사용자입니다"),
 
     // 403 토큰 만료
@@ -29,6 +28,9 @@ public enum ExceptionMessage {
 
     // 403 권한 없음
     INVALID_AUTH_TOKEN(403,"권한이 없는 사용자 입니다"),
+
+    // 404 해당음악게시글 없음
+    MUSIC_NOT_FOUND(404, "해당 게시글을 찾을 수 없습니다."),
 
     // 404 해당댓글 없음
     COMMENT_NOT_FOUND(404, "해당 댓글을 찾을 수 없습니다.");
