@@ -1,5 +1,6 @@
 package com.sparta.soundsea.music.controller;
 
+import com.sparta.soundsea.common.response.DataResponse;
 import com.sparta.soundsea.common.response.Response;
 import com.sparta.soundsea.music.dto.RequestCreateMusic;
 import com.sparta.soundsea.music.dto.ResponseMusic;
@@ -8,12 +9,11 @@ import com.sparta.soundsea.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static com.sparta.soundsea.common.response.ResponseMessage.CREATE_MUSIC_SUCCESS_MSG;
+import java.util.List;
+
+import static com.sparta.soundsea.common.response.ResponseMessage.*;
 
 @Slf4j
 @RequestMapping("/api/music")
@@ -24,7 +24,7 @@ public class MusicController {
     private final MusicService musicService;
 
     //추천음악 등록
-    @PostMapping("/new")
+    @PostMapping
     public Response createMusic(@AuthenticationPrincipal CustomUserDetails userDeatils, @RequestBody RequestCreateMusic requestDto){
         //UserDetails에서 userId 뽑아오기
         Long userId = userDeatils.getUser().getId();
@@ -35,5 +35,30 @@ public class MusicController {
 
         return new Response(CREATE_MUSIC_SUCCESS_MSG);
     }
+
+
+    //음악 전체 조회
+    @GetMapping("")
+    public DataResponse findAllMusic(){
+        List<ResponseMusic> listResponseMusic = musicService.findAllMusic();
+
+        return new DataResponse(READ_MUSIC_ALL_SUCCESS_MSG, listResponseMusic);
+    }
+
+
+
+
+
+    //선택 음악 상세페이지 조회
+    @GetMapping("/{id}")
+    public DataResponse findOneMusic(@PathVariable Long id){
+        ResponseMusic responseMusic = musicService.findOneMusic(id);
+
+        return new DataResponse(READ_MUSIC_ONE_SUCCESS_MSG, responseMusic);
+    }
+
+
+
+
 }
 
