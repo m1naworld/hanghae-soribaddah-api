@@ -39,27 +39,24 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // 1. CSRF(Cross-site request forgery) 비활성화 설정
-        http.csrf().disable();
+        // 1. CSRF(Cross-site request forgery) 비활성화 설정 및 cors 설정
+        http.csrf().disable()
+                .cors().configurationSource(corsConfigurationSource());
 
         // 2. Session 비활성화
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // 3. Request에 대한 인증/인가 및 cors 설정
+        // 3. Request에 대한 인증/인가
         http.authorizeRequests().
                 // 3-1. Authentication 예외 처리
                 // 3-1-1. SignUp, Login API 인증 예외 처리
                 antMatchers("/api/signup").permitAll().
                 antMatchers("/api/login").permitAll().
                 // 3-1-2. music 조회 관련 API 예외 처리
-
                 antMatchers(HttpMethod.GET, "/api/music").permitAll().
                 antMatchers(HttpMethod.GET, "/api/music/**").permitAll().
-                anyRequest().authenticated()
-                .and()
-                .cors().and();
-
-
+                anyRequest().authenticated();
+                
         // 4. Filter 등록
         // 4-1. JWT Filter 등록
         http.addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
