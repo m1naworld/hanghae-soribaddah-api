@@ -28,5 +28,16 @@ public class Comment extends Timestamped {
     private Music music;
 
 
+    public Comment(String contents, User user, Music music){
+
+        this.contents = contents;
+        this.user = user;
+        this.music = music;
+    }
+
+    public void update(String contents){
+
+        this.contents = contents;
+    }
 
 }
