@@ -26,6 +26,7 @@ import java.util.Date;
 
 import static com.sparta.soundsea.common.exception.ExceptionMessage.TOKEN_NOT_FOUND_MSG;
 import static com.sparta.soundsea.common.exception.ExceptionMessage.USER_NOT_FOUND_ERROR_MSG;
+import static com.sparta.soundsea.common.exception.ExceptionMessage.REFRESH_TOKEN_NOT_FOUND_MSG;
 
 @Slf4j      // Console에 log 찍으려고 사용
 @Component  // Bean 등록
@@ -168,14 +169,15 @@ public class JwtUtil {
         if (user.getAccessToken().substring(7).equals(resolveToken(request, "AccessToken"))
                 && user.getRefreshToken().substring(7).equals(resolveToken(request, "RefreshToken"))){
             // 4. RefreshToken 유효성 검사
-            if (validateRefreshToken(resolveToken(request, "RefreshToken"))){
-                System.out.println("JWT 재발급 조건 충족");
-                String newAccessToken = createAccessToken(user.getLoginId(), user.getRole());
-                response.addHeader(JwtUtil.AUTHORIZATION_ACCESS, newAccessToken);
-                // 5. Member Data 최신화
-                user.updateToken(newAccessToken, user.getRefreshToken());
-                userRepository.save(user);
+            if(!validateRefreshToken(resolveToken(request, "RefreshToken"))){
+                throw new CustomSecurityException(REFRESH_TOKEN_NOT_FOUND_MSG);
             }
+            System.out.println("JWT 재발급 조건 충족");
+            String newAccessToken = createAccessToken(user.getLoginId(), user.getRole());
+            response.addHeader(JwtUtil.AUTHORIZATION_ACCESS, newAccessToken);
+            // 5. Member Data 최신화
+            user.updateToken(newAccessToken, user.getRefreshToken());
+            userRepository.save(user);
         }
         // 6. 로그인 페이지 반환
     }

@@ -47,4 +47,7 @@ public class Music extends Timestamped {
     }
 
 
+    public void updateContents(String contents) {
+        this.contents = contents;
+    }
 }

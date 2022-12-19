@@ -14,7 +14,7 @@ public enum ResponseMessage {
     COMMENT_UPDATE_SUCCESS_MSG(200, "댓글 수정 성공"),
 
 
-    COMMENT_DELETE_SUCCESS_MSG(200, "댓글 삭제 성공");
+    COMMENT_DELETE_SUCCESS_MSG(200, "댓글 삭제 성공"),
 
 
     READ_MUSIC_ALL_SUCCESS_MSG(200, "추천 음악 전체 조회 성공"),
