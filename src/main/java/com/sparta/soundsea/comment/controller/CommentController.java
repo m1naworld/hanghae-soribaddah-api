@@ -4,39 +4,49 @@ import com.sparta.soundsea.comment.dto.CommentRequestDto;
 import com.sparta.soundsea.comment.dto.CommentResponseDto;
 import com.sparta.soundsea.comment.service.CommentService;
 import com.sparta.soundsea.common.response.Response;
+import com.sparta.soundsea.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 
 import static com.sparta.soundsea.common.response.ResponseMessage.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/comment")
+@RequestMapping("/api/music/{musicId}/comments")
 public class CommentController {
 
     private final CommentService commentService;
 
     //댓글 작성
-    @PostMapping("/new/{music_id}")
-    public Response createComment(@RequestBody CommentRequestDto requestDto, @PathVariable Long music_id, HttpServletRequest httpServletRequest) {
-        commentService.createComment(requestDto, music_id, httpServletRequest);
+    @PostMapping()
+    public Response createComment(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long musicId, @RequestBody CommentRequestDto requestDto) {
+        Long userId = userDetails.getUser().getId();
+
+        CommentResponseDto result = commentService.createComment(userId, musicId, requestDto);
+
+
         return new Response(COMMENT_CREATE_SUCCESS_MSG);
     }
 
     //댓글 수정
-    @PutMapping("/{music_id}/{comment_id}")
-    public Response updateComment(@RequestBody CommentRequestDto requestDto, @PathVariable Long comment_id, HttpServletRequest httpServletRequest){
-        commentService.updateComment(requestDto, comment_id, httpServletRequest);
+    @PatchMapping("/{commentId}")
+    public Response updateComment(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long commentId, @PathVariable Long musicId, @RequestBody CommentRequestDto requestDto){
+        Long userId = userDetails.getUser().getId();
+
+        commentService.updateComment(userId, commentId, musicId, requestDto);
+
         return new Response(COMMENT_UPDATE_SUCCESS_MSG);
     }
 
     //댓글 삭제
-    @DeleteMapping("/{music_id}/{comment_id}")
-    public Response deleteComment(@PathVariable Long comment_id, HttpServletRequest httpServletRequest){
-        commentService.deleteComment(comment_id, httpServletRequest);
+    @DeleteMapping("/{commentId}")
+    public Response deleteComment(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long commentId){
+        Long userId = userDetails.getUser().getId();
+
+        commentService.deleteComment(commentId, userId);
+
         return new Response(COMMENT_DELETE_SUCCESS_MSG);
     }
 }
