@@ -2,8 +2,6 @@ package com.sparta.soundsea.common.exception;
 
 import lombok.Getter;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-
 @Getter
 public enum ExceptionMessage {
 
@@ -22,7 +20,7 @@ public enum ExceptionMessage {
     TOKEN_NOT_FOUND_MSG(401,"토큰이 존재하지 않습니다."),
     INVALID_TOKEN_MSG(401,"토큰이 유효하지 않습니다."),
 
-    REFRESH_TOKEN_NOT_FOUND_MSG(401, "로그아웃 된 사용자입니다"),
+    REFRESH_TOKEN_NOT_FOUND_MSG(401, "로그아웃된 사용자입니다."),
     UNAUTHORIZED_USER(403, "인가되지 않은 사용자입니다"),
 
     // 403 토큰 만료
