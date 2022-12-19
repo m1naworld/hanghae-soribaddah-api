@@ -42,7 +42,8 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // 1. CSRF(Cross-site request forgery) 비활성화 설정
-        http.csrf().disable();
+        http.csrf().disable()
+                .cors().configurationSource(corsConfigurationSource());
 
         // 2. Session 비활성화
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -55,9 +56,9 @@ public class WebSecurityConfig {
                 antMatchers("/api/login").permitAll().
                 // 3-1-2. music 조회 관련 API 예외 처리
                 antMatchers(HttpMethod.GET, "/api/music*").permitAll().
-                anyRequest().authenticated()
-                .and()
-                .cors().and();
+                anyRequest().authenticated();
+//                .and()
+//                .cors();
 
         // 4. Filter 등록
         // 4-1. JWT Filter 등록
