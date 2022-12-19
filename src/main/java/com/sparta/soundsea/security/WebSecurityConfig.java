@@ -56,9 +56,7 @@ public class WebSecurityConfig {
                 // 3-1-2. music 조회 관련 API 예외 처리
                 antMatchers(HttpMethod.GET, "/api/music*").permitAll().
                 anyRequest().authenticated();
-//                .and()
-//                .cors();
-
+        
         // 4. Filter 등록
         // 4-1. JWT Filter 등록
         http.addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
