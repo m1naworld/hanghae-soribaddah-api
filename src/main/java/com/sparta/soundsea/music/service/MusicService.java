@@ -56,19 +56,17 @@ public class MusicService {
 
         List<Music> allMusic = musicRepository.findAllByOrderByLastModifiedAtDesc();
 
-        for(Music music : allMusic){
-             allResponseMusic.add(musicMapper.toResponse(music));
+        for (Music music : allMusic) {
+            allResponseMusic.add(musicMapper.toResponse(music));
         }
 
         return allResponseMusic;
     }
 
 
-
-
     //선택 음악 상세페이지 조회
     @Transactional(readOnly = true)
-    public ResponseMusic findOneMusic(Long musicId){
+    public ResponseMusic findOneMusic(Long musicId) {
 
         Music oneMusic = musicRepository.findById(musicId).orElseThrow(
                 () -> new IllegalArgumentException("선택한 음악은 존재하지 않습니다.")
@@ -77,12 +75,47 @@ public class MusicService {
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         List<Comment> comments = commentRepository.findAllByMusic_IdOrderByCreatedAtDesc(musicId);
-        for(Comment comment : comments){
+        for (Comment comment : comments) {
             commentResponseDtoList.add(new CommentResponseDto(comment));
         }
 
         return musicMapper.toResponse(oneMusic, commentResponseDtoList);
     }
+
+
+    //추천 음악 수정
+    @Transactional
+    public void update(Long musicId, Long userId, RequestCreateMusic requestDto) {
+
+        Music oneMusic = musicRepository.findById(musicId).orElseThrow(
+                () -> new IllegalArgumentException("선택한 음악은 존재하지 않습니다.")
+        );
+
+        if (oneMusic.getUser().getId().equals(userId)){
+            oneMusic.updateContents(requestDto.getContents());
+        } else {
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
+        }
+
+    }
+
+
+    @Transactional
+    public void delete(Long musicId, Long userId){
+        Music oneMusic = musicRepository.findById(musicId).orElseThrow(
+                () -> new IllegalArgumentException("선택한 음악은 존재하지 않습니다.")
+        );
+
+        if(oneMusic.getUser().getId().equals(userId)){
+            musicRepository.delete(oneMusic);
+        } else {
+            throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
+        }
+
+    }
+
+
+
 
 
 

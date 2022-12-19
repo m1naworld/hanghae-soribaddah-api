@@ -25,9 +25,9 @@ public class MusicController {
 
     //추천음악 등록
     @PostMapping
-    public Response createMusic(@AuthenticationPrincipal CustomUserDetails userDeatils, @RequestBody RequestCreateMusic requestDto){
+    public Response createMusic(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody RequestCreateMusic requestDto) {
         //UserDetails에서 userId 뽑아오기
-        Long userId = userDeatils.getUser().getId();
+        Long userId = userDetails.getUser().getId();
         ResponseMusic result = musicService.create(userId, requestDto);
 
         //확인용
@@ -39,26 +39,48 @@ public class MusicController {
 
     //음악 전체 조회
     @GetMapping("")
-    public DataResponse findAllMusic(){
+    public DataResponse findAllMusic() {
         List<ResponseMusic> listResponseMusic = musicService.findAllMusic();
 
         return new DataResponse(READ_MUSIC_ALL_SUCCESS_MSG, listResponseMusic);
     }
 
 
-
-
-
     //선택 음악 상세페이지 조회
     @GetMapping("/{id}")
-    public DataResponse findOneMusic(@PathVariable Long id){
+    public DataResponse findOneMusic(@PathVariable Long id) {
         ResponseMusic responseMusic = musicService.findOneMusic(id);
 
         return new DataResponse(READ_MUSIC_ONE_SUCCESS_MSG, responseMusic);
     }
 
 
+    //추천 음악 수정
+    @PatchMapping("/{id}")
+    public Response updateMusic(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody RequestCreateMusic requestDto) {
+        //UserDetails에서 userId 뽑아오기
+        Long userId = userDetails.getUser().getId();
+        musicService.update(id, userId, requestDto);
+
+        //확인용
+//        log.info("수정 결과 ResponseMusic = " + result);
+
+        return new Response(UPDATE_MUSIC_SUCCESS_MSG);
+
+    }
 
 
+    //추천 음악 삭제
+    @DeleteMapping("/{id}")
+    public Response deleteMusic(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        //UserDetails에서 userId 뽑아오기
+        Long userId = userDetails.getUser().getId();
+        musicService.delete(id, userId);
+
+        return new Response(DELETE_MUSIC_SUCCESS_MSG);
+    }
 }
+
+
 
