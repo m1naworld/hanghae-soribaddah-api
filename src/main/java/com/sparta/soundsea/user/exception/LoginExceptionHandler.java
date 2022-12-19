@@ -1,7 +1,7 @@
 package com.sparta.soundsea.user.exception;
 
 import com.sparta.soundsea.common.exception.ExceptionResponse;
-import com.sparta.soundsea.user.service.UserService;
+import com.sparta.soundsea.user.controller.UserController;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 // 2. RestControllerAdvice: @ContollerAdvice + @ResponseBody
 // 2-1. @ControllerAdvice: @InitBinder, @ModelAttribute, @ExceptionHandler 관련 어노테이션을 여러 컨트롤러에 걸쳐 공통으로 설정 할 수 있게 해주는 어노테이션
 // 2-2. assignableTypes: ExceptionHandler가 적용되는 범위를 지정, 조건을 과하게 걸면 성능에 매우 안좋은 영향을 끼칠 수 있다.
-@RestControllerAdvice(assignableTypes = UserService.class)
+@RestControllerAdvice(assignableTypes = UserController.class)
 public class LoginExceptionHandler {
     // 3. Response Status 설정 (Header)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
