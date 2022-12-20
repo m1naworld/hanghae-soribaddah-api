@@ -19,6 +19,7 @@ public class RequestSignUpUserDto {
                 .password(password)
                 .social(social)
                 .admin(admin)
+                .adminToken(adminToken)
                 .build();
     }
 }
