@@ -4,10 +4,12 @@ import com.sparta.soundsea.security.jwt.JwtAuthFilter;
 import com.sparta.soundsea.security.jwt.JwtUtil;
 import com.sparta.soundsea.security.jwt.exception.JwtExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,6 +52,8 @@ public class WebSecurityConfig {
                 // 3-1-1. SignUp, Login API 인증 예외 처리
                 antMatchers("/api/signup").permitAll().
                 antMatchers("/api/login").permitAll().
+                // 3-1-2. Social Login 기능 예외처리
+                antMatchers("/api/login/**").permitAll().
                 anyRequest().authenticated();
 
         // 4. Filter 등록
