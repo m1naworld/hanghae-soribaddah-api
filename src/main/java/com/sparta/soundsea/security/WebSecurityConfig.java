@@ -6,10 +6,8 @@ import com.sparta.soundsea.security.jwt.exception.JwtExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,11 +50,8 @@ public class WebSecurityConfig {
                 // 3-1-1. SignUp, Login API 인증 예외 처리
                 antMatchers("/api/signup").permitAll().
                 antMatchers("/api/login").permitAll().
-                // 3-1-2. music 조회 관련 API 예외 처리
-                antMatchers(HttpMethod.GET, "/api/music").permitAll().
-                antMatchers(HttpMethod.GET, "/api/music/**").permitAll().
                 anyRequest().authenticated();
-                
+
         // 4. Filter 등록
         // 4-1. JWT Filter 등록
         http.addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
@@ -79,6 +74,8 @@ public class WebSecurityConfig {
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true); // 내 서버가 응답할 때 json을 js에서 처리할 수 있게 설정
         configuration.setMaxAge(3600L);
+        configuration.addExposedHeader("AccessToken");
+        configuration.addExposedHeader("RefreshToken");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", configuration);
         return source;
