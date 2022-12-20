@@ -18,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sparta.soundsea.common.exception.ExceptionMessage.USER_NOT_FOUND_ERROR_MSG;
+import static com.sparta.soundsea.common.exception.ExceptionMessage.*;
+
 
 @Service
 @Slf4j
@@ -69,7 +70,7 @@ public class MusicService {
     public ResponseMusic findOneMusic(Long musicId) {
 
         Music oneMusic = musicRepository.findById(musicId).orElseThrow(
-                () -> new IllegalArgumentException("선택한 음악은 존재하지 않습니다.")
+                () -> new IllegalArgumentException(MUSIC_NOT_FOUND.getMsg())
         );
 
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
@@ -88,13 +89,13 @@ public class MusicService {
     public void update(Long musicId, Long userId, RequestCreateMusic requestDto) {
 
         Music oneMusic = musicRepository.findById(musicId).orElseThrow(
-                () -> new IllegalArgumentException("선택한 음악은 존재하지 않습니다.")
+                () -> new IllegalArgumentException(MUSIC_NOT_FOUND.getMsg())
         );
 
         if (oneMusic.getUser().getId().equals(userId)) {
             oneMusic.updateContents(requestDto.getContents());
         } else {
-            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
+            throw new IllegalArgumentException(INVALID_AUTH_TOKEN.getMsg());
         }
 
     }
@@ -103,13 +104,13 @@ public class MusicService {
     @Transactional
     public void delete(Long musicId, Long userId) {
         Music oneMusic = musicRepository.findById(musicId).orElseThrow(
-                () -> new IllegalArgumentException("선택한 음악은 존재하지 않습니다.")
+                () -> new NullPointerException(MUSIC_NOT_FOUND.getMsg())
         );
 
         if (oneMusic.getUser().getId().equals(userId)) {
             musicRepository.delete(oneMusic);
         } else {
-            throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
+            throw new IllegalArgumentException(INVALID_AUTH_TOKEN.getMsg());
         }
 
     }
