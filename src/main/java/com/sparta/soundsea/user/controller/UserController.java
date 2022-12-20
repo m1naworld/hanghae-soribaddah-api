@@ -1,7 +1,6 @@
 package com.sparta.soundsea.user.controller;
 
 import com.sparta.soundsea.common.response.Response;
-import com.sparta.soundsea.user.dto.NaverLoginDto;
 import com.sparta.soundsea.user.dto.RequestLoginUserDto;
 import com.sparta.soundsea.user.dto.RequestSignUpUserDto;
 import com.sparta.soundsea.user.service.UserNaverService;
@@ -35,8 +34,8 @@ public class UserController {
     }
 
     @GetMapping("/login/naver/callback")
-    public Response naverLogin(@RequestParam String code, @RequestParam String state){
-        userNaverService.naverLogin(naverOauth.getLoginDtoFromNaver(code, state));
+    public Response naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
+        userNaverService.naverLogin(naverOauth.getLoginDtoFromNaver(code, state), response);
         return new Response(LOGIN_USER_SUCCESS_MSG);
     }
 }

@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Service
 @RequiredArgsConstructor
 public class UserNaverService {
@@ -17,7 +19,7 @@ public class UserNaverService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public void naverLogin(NaverLoginDto naverLoginDto){
+    public void naverLogin(NaverLoginDto naverLoginDto, HttpServletResponse response){
         // 1. DB에 등록된 사용자인지 확인
         User naverUser = userRepository.findByLoginId(naverLoginDto.getLoginId())
                 .orElse(null);
@@ -30,9 +32,13 @@ public class UserNaverService {
             userRepository.saveAndFlush(naverUser);
         }
 
-        // 3. Token 발급
+        // 3. Token 생성
         String accessToken = jwtUtil.createAccessToken(naverUser.getLoginId(), naverUser.getRole());
         String refreshToken = jwtUtil.createRefreshToken();
+
+        // 4. Token 발급
+        response.addHeader(JwtUtil.AUTHORIZATION_ACCESS, accessToken);
+        response.addHeader(JwtUtil.AUTHORIZATION_REFRESH, refreshToken);
 
         // 4. 발급된 Token DB에 저장
         naverUser.updateToken(accessToken, refreshToken);
