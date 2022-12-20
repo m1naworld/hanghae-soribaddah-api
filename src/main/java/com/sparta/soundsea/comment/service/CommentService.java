@@ -8,15 +8,11 @@ import com.sparta.soundsea.comment.mapper.CommentMapper;
 import com.sparta.soundsea.comment.repository.CommentRepository;
 import com.sparta.soundsea.music.entity.Music;
 import com.sparta.soundsea.music.repository.MusicRepository;
-import com.sparta.soundsea.security.jwt.JwtUtil;
 import com.sparta.soundsea.user.entity.User;
-import com.sparta.soundsea.user.entity.UserRole;
 import com.sparta.soundsea.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import static com.sparta.soundsea.common.exception.ExceptionMessage.*;
 
@@ -38,10 +34,10 @@ public class CommentService {
     public CommentResponseDto createComment(Long userId, Long musicId, CommentRequestDto requestDto) {
 
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException(USER_NOT_FOUND_ERROR_MSG.getMsg()));
+                () -> new NullPointerException(USER_NOT_FOUND_ERROR_MSG.getMsg()));
 
         Music music = musicRepository.findById(musicId).orElseThrow(
-                () -> new IllegalArgumentException(MUSIC_NOT_FOUND.getMsg())
+                () -> new NullPointerException(MUSIC_NOT_FOUND.getMsg())
         );
 
        Comment comment = commentMapper.toComment(user, requestDto, music);
@@ -59,15 +55,15 @@ public class CommentService {
     public void updateComment(Long userId,Long commentId, Long musicId, CommentRequestDto requestDto) {
 
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException(USER_NOT_FOUND_ERROR_MSG.getMsg()));
+                () -> new NullPointerException(USER_NOT_FOUND_ERROR_MSG.getMsg()));
 
         //comment 찾아오기
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new IllegalArgumentException(COMMENT_NOT_FOUND.getMsg())
+                () -> new NullPointerException(COMMENT_NOT_FOUND.getMsg())
         );
 
         Music music = musicRepository.findById(musicId).orElseThrow(
-                () -> new IllegalArgumentException(MUSIC_NOT_FOUND.getMsg())
+                () -> new NullPointerException(MUSIC_NOT_FOUND.getMsg())
         );
 
         //작성자와 현재 사용자가 일치하는지 확인, 관리자가 아닌지 확인
@@ -87,10 +83,10 @@ public class CommentService {
     public void deleteComment(Long commentId, Long userId) {
 
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException(USER_NOT_FOUND_ERROR_MSG.getMsg()));
+                () -> new NullPointerException(USER_NOT_FOUND_ERROR_MSG.getMsg()));
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new IllegalArgumentException(COMMENT_NOT_FOUND.getMsg())
+                () -> new NullPointerException(COMMENT_NOT_FOUND.getMsg())
         );
 
         //작성자와 현재 사용자가 일치하는지 확인, 관리자가 아닌지 확인

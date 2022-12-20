@@ -91,7 +91,7 @@ public class MusicService {
                 () -> new IllegalArgumentException("선택한 음악은 존재하지 않습니다.")
         );
 
-        if (oneMusic.getUser().getId().equals(userId)){
+        if (oneMusic.getUser().getId().equals(userId)) {
             oneMusic.updateContents(requestDto.getContents());
         } else {
             throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
@@ -101,22 +101,18 @@ public class MusicService {
 
 
     @Transactional
-    public void delete(Long musicId, Long userId){
+    public void delete(Long musicId, Long userId) {
         Music oneMusic = musicRepository.findById(musicId).orElseThrow(
                 () -> new IllegalArgumentException("선택한 음악은 존재하지 않습니다.")
         );
 
-        if(oneMusic.getUser().getId().equals(userId)){
+        if (oneMusic.getUser().getId().equals(userId)) {
             musicRepository.delete(oneMusic);
         } else {
             throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
         }
 
     }
-
-
-
-
 
 
 }
