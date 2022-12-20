@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.sparta.soundsea.common.exception.ExceptionMessage.INVALID_TOKEN_MSG;
-import static com.sparta.soundsea.common.exception.ExceptionMessage.TOKEN_NOT_FOUND_MSG;
 
 @Slf4j  // Console에 Log 찍기 위해 선언
 @RequiredArgsConstructor
@@ -28,31 +27,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException, CustomSecurityException {
-        // Filter가 적용되고 있는 uri 추출
+        // 1. Filter가 적용되고 있는 uri 추출
         String uri = request.getRequestURI();
-        String method = request.getMethod();
 
-        // Login, SignUp, Music 전체 조회 API의 경우 해당 Filter 건너뜀.
-        if (uri.equals("/api/login") || uri.equals("/api/signup")){
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        // Music 조회 관련 API 일때 해당 Filter 건너뜀
-        if (uri.contains("/music") && method.equals("GET")){
+        // 2. Login, SignUp API의 경우 해당 Filter 건너뜀.
+        if (uri.contains("/api/login") || uri.contains("/api/signup")){
             filterChain.doFilter(request, response);
             return;
         }
 
         // 1. Request에서 토큰 추출
         String token = jwtUtil.resolveToken(request, "AccessToken");
+        // 1-1. Token에 어떠한 정보도 없는 경우
+        // Token not found Exception은 컨트롤러로 위임
+        if (token == null){
+            setAuthentication("Foreign");
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         // 2. Token 유효성 검사 및 인증
-        // 2-1. Token 존재 여부 확인
-        if(token == null) {
-            throw new CustomSecurityException(TOKEN_NOT_FOUND_MSG);
-        }
-        // 2-2. Token 유효성 확인
+        // 2-1. Token 유효성 확인
         if(!jwtUtil.validateAccessToken(token, request, response)){
             throw new CustomSecurityException(INVALID_TOKEN_MSG);
         }
