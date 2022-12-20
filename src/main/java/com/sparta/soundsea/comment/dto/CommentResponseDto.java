@@ -25,13 +25,17 @@ public class CommentResponseDto {
 
     private LocalDateTime lastModifiedAt;
 
+    private Boolean commentIsMine;
 
-    public CommentResponseDto(Comment comment) {
+
+    public CommentResponseDto(Comment comment, Boolean commentIsMine) {
 
         this.commentId = comment.getId();
         this.loginId = comment.getUser().getLoginId();
         this.contents = comment.getContents();
         this.createdAt = comment.getCreatedAt();
         this.lastModifiedAt = comment.getLastModifiedAt();
+        this.nickname = comment.getUser().getNickname();
+        this.commentIsMine = commentIsMine;
     }
 }
