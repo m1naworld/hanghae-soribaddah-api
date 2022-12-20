@@ -104,7 +104,7 @@ public class MusicService {
     @Transactional
     public void delete(Long musicId, Long userId){
         Music oneMusic = musicRepository.findById(musicId).orElseThrow(
-                () -> new IllegalArgumentException(MUSIC_NOT_FOUND.getMsg())
+                () -> new NullPointerException(MUSIC_NOT_FOUND.getMsg())
         );
 
         if(oneMusic.getUser().getId().equals(userId)){
