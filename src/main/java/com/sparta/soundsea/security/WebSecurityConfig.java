@@ -56,7 +56,7 @@ public class WebSecurityConfig {
                 antMatchers(HttpMethod.GET, "/api/music").permitAll().
                 antMatchers(HttpMethod.GET, "/api/music/**").permitAll().
                 anyRequest().authenticated();
-                
+
         // 4. Filter 등록
         // 4-1. JWT Filter 등록
         http.addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
@@ -79,6 +79,8 @@ public class WebSecurityConfig {
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true); // 내 서버가 응답할 때 json을 js에서 처리할 수 있게 설정
         configuration.setMaxAge(3600L);
+        configuration.addExposedHeader("AccessToken");
+        configuration.addExposedHeader("RefreshToken");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", configuration);
         return source;
