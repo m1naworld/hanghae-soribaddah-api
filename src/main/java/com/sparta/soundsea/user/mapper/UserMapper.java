@@ -1,5 +1,6 @@
 package com.sparta.soundsea.user.mapper;
 
+import com.sparta.soundsea.user.dto.NaverLoginDto;
 import com.sparta.soundsea.user.dto.SignUpUserDto;
 import com.sparta.soundsea.user.entity.User;
 import com.sparta.soundsea.user.entity.UserRole;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 import static com.sparta.soundsea.common.exception.ExceptionMessage.ADMIN_TOKEN_MISMATCH_ERROR_MSG;
 
@@ -42,6 +45,23 @@ public class UserMapper {
                 .nickname(signUpUserDto.getNickname())
                 .password(encryptedPassword)
                 .social(signUpUserDto.isSocial())
+                .role(role)
+                .build();
+    }
+
+    public User toEntityNaver(NaverLoginDto naverLoginDto) {
+        // 1. 유저 권한 부여
+        UserRole role = UserRole.USER;
+        // 2. 비밀번호 생성(UUID)
+        String password = UUID.randomUUID().toString();
+        // 2-1. 비밀번호 암호화
+        String encryptedPassword = passwordEncoder.encode(password);
+        // 3. Entity 생성
+        return User.builder()
+                .loginId(naverLoginDto.getLoginId())
+                .nickname(naverLoginDto.getNickname())
+                .password(encryptedPassword)
+                .social(true)
                 .role(role)
                 .build();
     }
