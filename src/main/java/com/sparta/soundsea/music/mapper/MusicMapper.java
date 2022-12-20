@@ -29,7 +29,7 @@ public class MusicMapper {
                 .build();
     }
 
-    public ResponseMusic toResponse(Music music, List<CommentResponseDto> commentResponseDtoList){
+    public ResponseMusic toResponse(Music music, List<CommentResponseDto> commentResponseDtoList, Boolean musicIsMine){
         return ResponseMusic.builder()
                 .musicId(music.getId())
                 .title(music.getTitle())
@@ -40,6 +40,7 @@ public class MusicMapper {
                 .createdAt(music.getCreatedAt())
                 .modifiedAt(music.getLastModifiedAt())
                 .commentList(commentResponseDtoList)
+                .musicIsMine(musicIsMine)
                 .build();
     }
 

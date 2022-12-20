@@ -20,5 +20,6 @@ public class ResponseMusic {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<CommentResponseDto> commentList;
+    private Boolean musicIsMine;
 
 }

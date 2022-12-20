@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.sparta.soundsea.common.exception.ExceptionMessage.TOKEN_NOT_FOUND_MSG;
 import static com.sparta.soundsea.common.response.ResponseMessage.*;
 
 @Slf4j
@@ -26,12 +27,18 @@ public class MusicController {
     //추천음악 등록
     @PostMapping
     public Response createMusic(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody RequestCreateMusic requestDto) {
-        //UserDetails에서 userId 뽑아오기
-        Long userId = userDetails.getUser().getId();
-        ResponseMusic result = musicService.create(userId, requestDto);
 
-        //확인용
-        log.info("등록 결과 ResponseMusic = " + result);
+        //UserDetails에서 loginId로 로그인한 유저인지 확인
+
+        String loginId = userDetails.getUser().getLoginId();
+        Long userId = userDetails.getUser().getId();
+
+        if(loginId.equals("Foreign")){
+            throw new IllegalArgumentException(TOKEN_NOT_FOUND_MSG.getMsg());
+        }
+
+        musicService.create(userId, requestDto);
+
 
         return new Response(CREATE_MUSIC_SUCCESS_MSG);
     }
@@ -39,31 +46,56 @@ public class MusicController {
 
     //음악 전체 조회
     @GetMapping("")
-    public DataResponse findAllMusic() {
+    public DataResponse findAllMusic(@AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Boolean checkLoginId = false;
+
+        String loginId = userDetails.getUser().getLoginId();
+
+        if(!(loginId.equals("Foreign"))){
+            checkLoginId = true;
+        }
+
         List<ResponseMusic> listResponseMusic = musicService.findAllMusic();
 
-        return new DataResponse(READ_MUSIC_ALL_SUCCESS_MSG, listResponseMusic);
+        return new DataResponse(READ_MUSIC_ALL_SUCCESS_MSG, listResponseMusic, checkLoginId);
     }
 
 
     //선택 음악 상세페이지 조회
     @GetMapping("/{id}")
-    public DataResponse findOneMusic(@PathVariable Long id) {
-        ResponseMusic responseMusic = musicService.findOneMusic(id);
+    public DataResponse findOneMusic(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long id) {
 
-        return new DataResponse(READ_MUSIC_ONE_SUCCESS_MSG, responseMusic);
+        Boolean checkLoginId = false;
+
+        Long userId = userDetails.getUser().getId();
+
+        String loginId = userDetails.getUser().getLoginId();
+
+        if(!loginId.equals("Foreign")){
+            checkLoginId = true;
+        }
+
+        ResponseMusic responseMusic = musicService.findOneMusic(id, userId);
+
+        return new DataResponse(READ_MUSIC_ONE_SUCCESS_MSG, responseMusic, checkLoginId);
     }
 
 
     //추천 음악 수정
     @PatchMapping("/{id}")
     public Response updateMusic(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody RequestCreateMusic requestDto) {
-        //UserDetails에서 userId 뽑아오기
+
+
+        String loginId = userDetails.getUser().getLoginId();
         Long userId = userDetails.getUser().getId();
+
+        if(loginId.equals("Foreign")){
+            throw new IllegalArgumentException(TOKEN_NOT_FOUND_MSG.getMsg());
+        }
+
         musicService.update(id, userId, requestDto);
 
-        //확인용
-//        log.info("수정 결과 ResponseMusic = " + result);
 
         return new Response(UPDATE_MUSIC_SUCCESS_MSG);
 
@@ -74,9 +106,16 @@ public class MusicController {
     @DeleteMapping("/{id}")
     public Response deleteMusic(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        //UserDetails에서 userId 뽑아오기
+
+        String loginId = userDetails.getUser().getLoginId();
         Long userId = userDetails.getUser().getId();
+
+        if(loginId.equals("Foreign")){
+            throw new IllegalArgumentException(TOKEN_NOT_FOUND_MSG.getMsg());
+        }
+
         musicService.delete(id, userId);
+
 
         return new Response(DELETE_MUSIC_SUCCESS_MSG);
     }

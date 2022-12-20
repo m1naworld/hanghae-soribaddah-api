@@ -67,7 +67,10 @@ public class MusicService {
 
     //선택 음악 상세페이지 조회
     @Transactional(readOnly = true)
-    public ResponseMusic findOneMusic(Long musicId) {
+    public ResponseMusic findOneMusic(Long musicId, Long userId) { //2
+
+        Boolean musicIsMine = false;
+        Boolean commentIsMine;
 
         Music oneMusic = musicRepository.findById(musicId).orElseThrow(
                 () -> new IllegalArgumentException(MUSIC_NOT_FOUND.getMsg())
@@ -77,10 +80,21 @@ public class MusicService {
 
         List<Comment> comments = commentRepository.findAllByMusic_IdOrderByCreatedAtDesc(musicId);
         for (Comment comment : comments) {
-            commentResponseDtoList.add(new CommentResponseDto(comment));
+
+            if(comment.getUser().getId().equals(userId)){
+                commentIsMine = true;
+            } else {
+                commentIsMine = false;
+            }
+
+            commentResponseDtoList.add(new CommentResponseDto(comment, commentIsMine));
         }
 
-        return musicMapper.toResponse(oneMusic, commentResponseDtoList);
+        if(oneMusic.getUser().getId().equals(userId)){
+            musicIsMine = true;
+        }
+
+        return musicMapper.toResponse(oneMusic, commentResponseDtoList, musicIsMine);
     }
 
 
