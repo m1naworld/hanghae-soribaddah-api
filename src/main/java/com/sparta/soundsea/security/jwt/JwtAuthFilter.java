@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.sparta.soundsea.common.exception.ExceptionMessage.INVALID_TOKEN_MSG;
+import static com.sparta.soundsea.common.exception.ExceptionMessage.EXPIRATION_TOKEN;
 
 @Slf4j  // Console에 Log 찍기 위해 선언
 @RequiredArgsConstructor
@@ -49,7 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // 2. Token 유효성 검사 및 인증
         // 2-1. Token 유효성 확인
         if(!jwtUtil.validateAccessToken(token, request, response)){
-            throw new CustomSecurityException(INVALID_TOKEN_MSG);
+            throw new CustomSecurityException(EXPIRATION_TOKEN);
         }
         // 3. 사용자 인증
         Claims info = jwtUtil.getUserInfoFromHttpServletRequest(request);

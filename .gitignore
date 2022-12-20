@@ -46,4 +46,5 @@ src/main/resources/application-h2.properties
 
 ### properties about security key ###
 security.properties
+OAuth.properties
 

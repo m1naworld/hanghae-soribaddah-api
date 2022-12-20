@@ -3,12 +3,10 @@ package com.sparta.soundsea.user.controller;
 import com.sparta.soundsea.common.response.Response;
 import com.sparta.soundsea.user.dto.RequestLoginUserDto;
 import com.sparta.soundsea.user.dto.RequestSignUpUserDto;
+import com.sparta.soundsea.user.service.UserNaverService;
 import com.sparta.soundsea.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,6 +18,8 @@ import static com.sparta.soundsea.common.response.ResponseMessage.SIGNUP_USER_SU
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserNaverService userNaverService;
+    private final NaverOauth naverOauth;
 
     @PostMapping("/signup")
     public Response signUp(@RequestBody RequestSignUpUserDto requestSignUpUserDto) {
@@ -33,4 +33,9 @@ public class UserController {
         return new Response(LOGIN_USER_SUCCESS_MSG);
     }
 
+    @GetMapping("/login/naver/callback")
+    public Response naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
+        userNaverService.naverLogin(naverOauth.getLoginDtoFromNaver(code, state), response);
+        return new Response(LOGIN_USER_SUCCESS_MSG);
+    }
 }
