@@ -3,6 +3,7 @@ package com.sparta.soundsea.music.service;
 import com.sparta.soundsea.comment.dto.CommentResponseDto;
 import com.sparta.soundsea.comment.entity.Comment;
 import com.sparta.soundsea.comment.repository.CommentRepository;
+import com.sparta.soundsea.image.service.S3UploaderService;
 import com.sparta.soundsea.music.dto.RequestCreateMusic;
 import com.sparta.soundsea.music.dto.ResponseMusic;
 import com.sparta.soundsea.music.entity.Music;
@@ -12,9 +13,12 @@ import com.sparta.soundsea.user.entity.User;
 import com.sparta.soundsea.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,14 +35,19 @@ public class MusicService {
     private final CommentRepository commentRepository;
     private final MusicMapper musicMapper;
 
+    @Autowired
+    private S3UploaderService s3Uploader;
+
 
     //추천음악 등록
     @Transactional
-    public ResponseMusic create(Long userId, RequestCreateMusic requestDto) {
+    public ResponseMusic create(Long userId, MultipartFile image, RequestCreateMusic requestDto) throws IOException {
+
+        String storedFileName = s3Uploader.upload(image, "images");
 
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException(USER_NOT_FOUND_ERROR_MSG.getMsg()));
-        Music newMusic = musicMapper.toMusic(user, requestDto);
+        Music newMusic = musicMapper.toMusic(user, requestDto, storedFileName);
 
         //확인
         log.info("user = " + user);
@@ -47,10 +56,10 @@ public class MusicService {
         musicRepository.save(newMusic);
 
         return musicMapper.toResponse(newMusic);
-
     }
 
     //음악 전체 조회
+    @Transactional
     public List<ResponseMusic> findAllMusic() {
 
         List<ResponseMusic> allResponseMusic = new ArrayList<>();
@@ -81,7 +90,7 @@ public class MusicService {
         List<Comment> comments = commentRepository.findAllByMusic_IdOrderByCreatedAtDesc(musicId);
         for (Comment comment : comments) {
 
-            if(comment.getUser().getId().equals(userId)){
+            if (comment.getUser().getId().equals(userId)) {
                 commentIsMine = true;
             } else {
                 commentIsMine = false;
@@ -90,7 +99,7 @@ public class MusicService {
             commentResponseDtoList.add(new CommentResponseDto(comment, commentIsMine));
         }
 
-        if(oneMusic.getUser().getId().equals(userId)){
+        if (oneMusic.getUser().getId().equals(userId)) {
             musicIsMine = true;
         }
 

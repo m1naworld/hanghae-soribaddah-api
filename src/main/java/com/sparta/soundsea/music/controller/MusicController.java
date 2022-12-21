@@ -8,9 +8,12 @@ import com.sparta.soundsea.music.service.MusicService;
 import com.sparta.soundsea.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.sparta.soundsea.common.exception.ExceptionMessage.TOKEN_NOT_FOUND_MSG;
@@ -26,7 +29,8 @@ public class MusicController {
 
     //추천음악 등록
     @PostMapping
-    public Response createMusic(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody RequestCreateMusic requestDto) {
+    public Response createMusic(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam(value="image") MultipartFile image,
+                                @RequestPart (value = "requestDto")RequestCreateMusic requestDto)throws IOException {
 
         //UserDetails에서 loginId로 로그인한 유저인지 확인
 
@@ -37,7 +41,7 @@ public class MusicController {
             throw new IllegalArgumentException(TOKEN_NOT_FOUND_MSG.getMsg());
         }
 
-        musicService.create(userId, requestDto);
+        musicService.create(userId, image, requestDto);
 
 
         return new Response(CREATE_MUSIC_SUCCESS_MSG);
