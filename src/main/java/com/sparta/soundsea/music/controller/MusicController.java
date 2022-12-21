@@ -48,17 +48,17 @@ public class MusicController {
     @GetMapping("")
     public DataResponse findAllMusic(@AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        Boolean checkLoginId = false;
+        Boolean checkLogin = false;
 
         String loginId = userDetails.getUser().getLoginId();
 
         if(!(loginId.equals("Foreign"))){
-            checkLoginId = true;
+            checkLogin = true;
         }
 
         List<ResponseMusic> listResponseMusic = musicService.findAllMusic();
 
-        return new DataResponse(READ_MUSIC_ALL_SUCCESS_MSG, listResponseMusic, checkLoginId);
+        return new DataResponse(READ_MUSIC_ALL_SUCCESS_MSG, listResponseMusic, checkLogin);
     }
 
 
@@ -66,19 +66,19 @@ public class MusicController {
     @GetMapping("/{id}")
     public DataResponse findOneMusic(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long id) {
 
-        Boolean checkLoginId = false;
+        Boolean checkLogin = false;
 
         Long userId = userDetails.getUser().getId();
 
         String loginId = userDetails.getUser().getLoginId();
 
         if(!loginId.equals("Foreign")){
-            checkLoginId = true;
+            checkLogin = true;
         }
 
         ResponseMusic responseMusic = musicService.findOneMusic(id, userId);
 
-        return new DataResponse(READ_MUSIC_ONE_SUCCESS_MSG, responseMusic, checkLoginId);
+        return new DataResponse(READ_MUSIC_ONE_SUCCESS_MSG, responseMusic, checkLogin);
     }
 
 

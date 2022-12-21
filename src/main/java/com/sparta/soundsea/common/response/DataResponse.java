@@ -6,17 +6,17 @@ import lombok.Getter;
 public class DataResponse<T> extends Response{
     private T data;
 
-    private boolean checkLoginId;
+    private boolean checkLogin;
 
     public DataResponse(ResponseMessage responseMessage, T data) {
         super(responseMessage);
         this.data = data;
     }
 
-    public DataResponse(ResponseMessage responseMessage, T data, boolean checkLoginId) {
+    public DataResponse(ResponseMessage responseMessage, T data, boolean checkLogin) {
         super(responseMessage);
         this.data = data;
-        this.checkLoginId = checkLoginId;
+        this.checkLogin = checkLogin;
     }
 
     public DataResponse(String msg, int statusCode, T data) {
