@@ -6,6 +6,7 @@ public class RequestNaverOauthLoginDto {
     private String resultcode;
     private String message;
     private Response response;
+
     @Getter
     private static class Response {
         private String id;
@@ -14,8 +15,8 @@ public class RequestNaverOauthLoginDto {
         private String name;
     }
 
-    public NaverLoginDto toNaverLoginDto(){
-        return NaverLoginDto.builder()
+    public OAuthLoginDto toNaverLoginDto(){
+        return OAuthLoginDto.builder()
                 .loginId(response.email)
                 .nickname(response.nickname)
                 .build();

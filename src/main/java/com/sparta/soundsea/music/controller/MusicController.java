@@ -26,12 +26,11 @@ public class MusicController {
 
     private final MusicService musicService;
 
-    //추천음악 등록
+
     @PostMapping
     public Response createMusic(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam(value="image") MultipartFile image,
                                 @RequestPart (value = "requestDto")RequestCreateMusic requestDto)throws IOException {
 
-        //UserDetails에서 loginId로 로그인한 유저인지 확인
 
         String loginId = userDetails.getUser().getLoginId();
         Long userId = userDetails.getUser().getId();
@@ -42,12 +41,10 @@ public class MusicController {
 
         musicService.create(userId, image, requestDto);
 
-
         return new Response(CREATE_MUSIC_SUCCESS_MSG);
     }
 
 
-    //음악 전체 조회
     @GetMapping("")
     public DataResponse findAllMusic(@AuthenticationPrincipal CustomUserDetails userDetails) {
 
@@ -65,7 +62,6 @@ public class MusicController {
     }
 
 
-    //선택 음악 상세페이지 조회
     @GetMapping("/{id}")
     public DataResponse findOneMusic(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long id) {
 
@@ -85,7 +81,6 @@ public class MusicController {
     }
 
 
-    //추천 음악 수정
     @PatchMapping("/{id}")
     public Response updateMusic(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody RequestCreateMusic requestDto) {
 
@@ -99,13 +94,11 @@ public class MusicController {
 
         musicService.update(id, userId, requestDto);
 
-
         return new Response(UPDATE_MUSIC_SUCCESS_MSG);
 
     }
 
 
-    //추천 음악 삭제
     @DeleteMapping("/{id}")
     public Response deleteMusic(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
 

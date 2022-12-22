@@ -2,7 +2,7 @@ package com.sparta.soundsea.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.soundsea.user.dto.NaverLoginDto;
+import com.sparta.soundsea.user.dto.OAuthLoginDto;
 import com.sparta.soundsea.user.dto.RequestNaverOauthLoginDto;
 import com.sparta.soundsea.user.dto.RequestNaverOauthTokenDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,7 +90,7 @@ public class NaverOauth {
         return requestNaverOauthLoginDto;
     }
 
-    public NaverLoginDto getLoginDtoFromNaver(String code, String state){
+    public OAuthLoginDto getLoginDtoFromNaver(String code, String state){
         return getProfileFromToken(codeToToken(code, state)).toNaverLoginDto();
     }
 

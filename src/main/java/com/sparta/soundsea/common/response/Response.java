@@ -12,8 +12,4 @@ public class Response {
         this.statusCode = responseMessage.getStatusCode();
     }
 
-    public Response(String msg, int statusCode) {
-        this.msg = msg;
-        this.statusCode = statusCode;
-    }
 }

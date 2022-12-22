@@ -1,6 +1,6 @@
 package com.sparta.soundsea.user.mapper;
 
-import com.sparta.soundsea.user.dto.NaverLoginDto;
+import com.sparta.soundsea.user.dto.OAuthLoginDto;
 import com.sparta.soundsea.user.dto.SignUpUserDto;
 import com.sparta.soundsea.user.entity.User;
 import com.sparta.soundsea.user.entity.UserRole;
@@ -49,7 +49,7 @@ public class UserMapper {
                 .build();
     }
 
-    public User toEntityNaver(NaverLoginDto naverLoginDto) {
+    public User toEntityOAuth(OAuthLoginDto oAuthLoginDto) {
         // 1. 유저 권한 부여
         UserRole role = UserRole.USER;
         // 2. 비밀번호 생성(UUID)
@@ -58,8 +58,8 @@ public class UserMapper {
         String encryptedPassword = passwordEncoder.encode(password);
         // 3. Entity 생성
         return User.builder()
-                .loginId(naverLoginDto.getLoginId())
-                .nickname(naverLoginDto.getNickname())
+                .loginId(oAuthLoginDto.getLoginId())
+                .nickname(oAuthLoginDto.getNickname())
                 .password(encryptedPassword)
                 .social(true)
                 .role(role)

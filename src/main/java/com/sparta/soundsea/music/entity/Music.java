@@ -18,19 +18,14 @@ public class Music extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
     private String title;
-
     @Column(nullable = false)
     private String contents;
-
     @Column(nullable = false)
     private String artist;
-
     @Column(nullable = false)
     private String image;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
@@ -47,12 +42,12 @@ public class Music extends Timestamped {
         this.user = user;
     }
 
-
     public void updateMusic(RequestCreateMusic requestDto) {
 
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
         this.artist = requestDto.getArtist();
         this.image = requestDto.getImage();
+
     }
 }

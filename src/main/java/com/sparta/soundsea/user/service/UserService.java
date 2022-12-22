@@ -3,6 +3,7 @@ package com.sparta.soundsea.user.service;
 
 import com.sparta.soundsea.security.jwt.JwtUtil;
 import com.sparta.soundsea.user.dto.LoginUserDto;
+import com.sparta.soundsea.user.dto.OAuthLoginDto;
 import com.sparta.soundsea.user.dto.SignUpUserDto;
 import com.sparta.soundsea.user.entity.User;
 import com.sparta.soundsea.user.mapper.UserMapper;
@@ -88,6 +89,28 @@ public class UserService {
             // 5. 발급된 Token DB에 저장
             user.updateToken(accessToken, refreshToken);
         }
+    }
+
+    // 소셜 로그인
+    @Transactional
+    public void OAuthLogin(OAuthLoginDto oAuthLoginDto, HttpServletResponse response){
+        User socialUser = userRepository.findByLoginId(oAuthLoginDto.getLoginId())
+                .orElse(null);
+
+        if(socialUser == null) {
+            socialUser = userMapper.toEntityOAuth(oAuthLoginDto);
+            userRepository.saveAndFlush(socialUser);
+        }
+
+        String accessToken = jwtUtil.createAccessToken(socialUser.getLoginId(), socialUser.getRole());
+        String refreshToken = jwtUtil.createRefreshToken();
+
+        response.addHeader(JwtUtil.AUTHORIZATION_ACCESS, accessToken);
+        response.addHeader(JwtUtil.AUTHORIZATION_REFRESH, refreshToken);
+
+
+        // 5. 발급된 Token DB에 저장
+        socialUser.updateToken(accessToken, refreshToken);
     }
 
 }

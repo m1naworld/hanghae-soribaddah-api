@@ -4,12 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class NaverLoginDto {
+public class OAuthLoginDto {
     private String loginId;
     private String nickname;
 
     @Builder
-    public NaverLoginDto(String loginId, String nickname) {
+    public OAuthLoginDto(String loginId, String nickname) {
         this.loginId = loginId;
         this.nickname = nickname;
     }

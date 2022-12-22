@@ -42,7 +42,7 @@ public class JwtUtil {
     // 토큰 생성 시 앞에 붙는 식별자
     private static final String BEARER_PREFIX = "Bearer ";
     // 토큰 만료 시간 (분*초*밀리sec)
-    private static final long TOKEN_TIME = 30 * 60 * 1000L;
+    private static final long TOKEN_TIME = 24 * 60 * 60 * 1000L;
     // 의존성 주입
     private final UserRepository userRepository;
     private final CustomUserDetailsService userDetailsService;
