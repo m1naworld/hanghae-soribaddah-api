@@ -161,7 +161,6 @@ public class JwtUtil {
     private void accessTokenReissuance(HttpServletRequest request, HttpServletResponse response) {
         // 1. request에서 accessToken 분해 후, 사용자 이름 찾아옴.
         Claims info = getUserInfoFromHttpServletRequest(request);
-        System.out.println("username : " + info.getSubject());
         // 2. 사용자 이름을 통해 Member Entity 불러옴
         User user = userRepository.findByLoginId(info.getSubject())
                 .orElseThrow(()-> new CustomSecurityException(USER_NOT_FOUND_ERROR_MSG));
@@ -172,7 +171,6 @@ public class JwtUtil {
             if(!validateRefreshToken(resolveToken(request, "RefreshToken"))){
                 throw new CustomSecurityException(REFRESH_TOKEN_NOT_FOUND_MSG);
             }
-            System.out.println("JWT 재발급 조건 충족");
             String newAccessToken = createAccessToken(user.getLoginId(), user.getRole());
             response.addHeader(JwtUtil.AUTHORIZATION_ACCESS, newAccessToken);
             // 5. Member Data 최신화
