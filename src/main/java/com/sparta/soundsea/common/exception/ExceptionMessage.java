@@ -16,6 +16,9 @@ public enum ExceptionMessage {
     INVALID_LOGINID_MSG(400,"유효하지 않은 ID 입니다."),
     INVALID_PASSWORD_MSG(400,"유효하지 않은 PW 입니다."),
 
+    // social User
+    SOCIAL_LOGIN_ERROR_MSG(401, "카카오 소셜 로그인 오류입니다."),
+
     // JWT, OAuth
     TOKEN_NOT_FOUND_MSG(401,"토큰이 존재하지 않습니다."),
     INVALID_TOKEN_MSG(401,"토큰이 유효하지 않습니다."),
