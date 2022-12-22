@@ -32,7 +32,6 @@ public class MusicService {
     private final MusicMapper musicMapper;
 
 
-    //추천음악 등록
     @Transactional
     public ResponseMusic create(Long userId, RequestCreateMusic requestDto) {
 
@@ -40,17 +39,13 @@ public class MusicService {
                 () -> new IllegalArgumentException(USER_NOT_FOUND_ERROR_MSG.getMsg()));
         Music newMusic = musicMapper.toMusic(user, requestDto);
 
-        //확인
-        log.info("user = " + user);
-        log.info("newMusic = " + newMusic);
-
         musicRepository.save(newMusic);
 
         return musicMapper.toResponse(newMusic);
 
     }
 
-    //음악 전체 조회
+    @Transactional(readOnly = true)
     public List<ResponseMusic> findAllMusic() {
 
         List<ResponseMusic> allResponseMusic = new ArrayList<>();
@@ -65,9 +60,9 @@ public class MusicService {
     }
 
 
-    //선택 음악 상세페이지 조회
+
     @Transactional(readOnly = true)
-    public ResponseMusic findOneMusic(Long musicId, Long userId) { //2
+    public ResponseMusic findOneMusic(Long musicId, Long userId) {
 
         Boolean musicIsMine = false;
         Boolean commentIsMine;
@@ -98,7 +93,6 @@ public class MusicService {
     }
 
 
-    //추천 음악 수정
     @Transactional
     public void update(Long musicId, Long userId, RequestCreateMusic requestDto) {
 
@@ -117,6 +111,7 @@ public class MusicService {
 
     @Transactional
     public void delete(Long musicId, Long userId) {
+
         Music oneMusic = musicRepository.findById(musicId).orElseThrow(
                 () -> new NullPointerException(MUSIC_NOT_FOUND.getMsg())
         );
