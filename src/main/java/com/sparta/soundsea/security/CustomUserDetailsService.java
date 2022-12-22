@@ -16,7 +16,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        System.out.println("UserDetailsServiceImpl.loadUserByUsername : " + userName);
         // 1. UserName이 Foreign인 경우(=로그인하지 않은 사용자인 경우 = 토큰이 비어있는 경우)
         if (userName.equals("Foreign")) {
             // 2. 임시로 사용할 User Foreign 생성 및 반환
