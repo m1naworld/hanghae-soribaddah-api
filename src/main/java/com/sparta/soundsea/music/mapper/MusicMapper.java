@@ -11,8 +11,8 @@ import java.util.List;
 
 @Component
 public class MusicMapper {
-    public Music toMusic(User user, RequestCreateMusic requestDto) {
-        return new Music(requestDto.getTitle(), requestDto.getContents(), requestDto.getArtist(), requestDto.getImage(), user);
+    public Music toMusic(User user, RequestCreateMusic requestDto, String storedFileName) {
+        return new Music(requestDto.getTitle(), requestDto.getContents(), requestDto.getArtist(), storedFileName, user);
     }
 
     public ResponseMusic toResponse(Music music) {
