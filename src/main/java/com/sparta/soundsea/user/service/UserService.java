@@ -108,6 +108,8 @@ public class UserService {
         response.addHeader(JwtUtil.AUTHORIZATION_ACCESS, accessToken);
         response.addHeader(JwtUtil.AUTHORIZATION_REFRESH, refreshToken);
 
+
+        // 5. 발급된 Token DB에 저장
         socialUser.updateToken(accessToken, refreshToken);
     }
 
