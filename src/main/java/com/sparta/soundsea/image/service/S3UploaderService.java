@@ -33,7 +33,6 @@ public class S3UploaderService {
     // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
     @Transactional
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
-        System.out.println("============================" + multipartFile.getOriginalFilename());
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
         return upload(uploadFile, dirName);
@@ -67,10 +66,8 @@ public class S3UploaderService {
 
     private Optional<File> convert(MultipartFile file) throws IOException {
         File convertFile = new File(file.getOriginalFilename());
-        System.out.println("===================" + convertFile);
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                System.out.println("===========================" + fos);
                 fos.write(file.getBytes());
             }
             return Optional.of(convertFile);
