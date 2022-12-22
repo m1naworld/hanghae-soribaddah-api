@@ -94,27 +94,20 @@ public class UserService {
     // 소셜 로그인
     @Transactional
     public void OAuthLogin(OAuthLoginDto oAuthLoginDto, HttpServletResponse response){
-        // 1. DB에 등록된 사용자인지 확인
         User socialUser = userRepository.findByLoginId(oAuthLoginDto.getLoginId())
                 .orElse(null);
 
-        // 2. 등록되지 않은 사용자인 경우 우선 DB에 저장
         if(socialUser == null) {
-            // 2-1. naverLoginDto를 User Entity로 변환
             socialUser = userMapper.toEntityOAuth(oAuthLoginDto);
-            // 2-2. 사용자 저장
             userRepository.saveAndFlush(socialUser);
         }
 
-        // 3. Token 생성
         String accessToken = jwtUtil.createAccessToken(socialUser.getLoginId(), socialUser.getRole());
         String refreshToken = jwtUtil.createRefreshToken();
 
-        // 4. Token 발급
         response.addHeader(JwtUtil.AUTHORIZATION_ACCESS, accessToken);
         response.addHeader(JwtUtil.AUTHORIZATION_REFRESH, refreshToken);
 
-        // 4. 발급된 Token DB에 저장
         socialUser.updateToken(accessToken, refreshToken);
     }
 
