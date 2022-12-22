@@ -1,7 +1,7 @@
 package com.sparta.soundsea.user.service;
 
 import com.sparta.soundsea.security.jwt.JwtUtil;
-import com.sparta.soundsea.user.dto.NaverLoginDto;
+import com.sparta.soundsea.user.dto.OAuthLoginDto;
 import com.sparta.soundsea.user.entity.User;
 import com.sparta.soundsea.user.mapper.UserMapper;
 import com.sparta.soundsea.user.repository.UserRepository;
@@ -20,7 +20,7 @@ public class UserNaverService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public void naverLogin(NaverLoginDto naverLoginDto, HttpServletResponse response){
+    public void naverLogin(OAuthLoginDto naverLoginDto, HttpServletResponse response){
         // 1. DB에 등록된 사용자인지 확인
         User naverUser = userRepository.findByLoginId(naverLoginDto.getLoginId())
                 .orElse(null);
@@ -28,7 +28,7 @@ public class UserNaverService {
         // 2. 등록되지 않은 사용자인 경우 우선 DB에 저장
         if(naverUser == null) {
             // 2-1. naverLoginDto를 User Entity로 변환
-            naverUser = userMapper.toEntityNaver(naverLoginDto);
+            naverUser = userMapper.toEntityOAuth(naverLoginDto);
             // 2-2. 사용자 저장
             userRepository.saveAndFlush(naverUser);
         }
