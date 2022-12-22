@@ -8,9 +8,14 @@ import com.sparta.soundsea.user.service.UserKakaoService;
 import com.sparta.soundsea.user.service.UserNaverService;
 import com.sparta.soundsea.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+
+import java.net.URI;
 
 import static com.sparta.soundsea.common.response.ResponseMessage.LOGIN_USER_SUCCESS_MSG;
 import static com.sparta.soundsea.common.response.ResponseMessage.SIGNUP_USER_SUCCESS_MSG;
@@ -37,9 +42,14 @@ public class UserController {
     }
 
     @GetMapping("/login/naver/callback")
-    public String naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
+    public ResponseEntity<?> naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
         userNaverService.naverLogin(naverOauth.getLoginDtoFromNaver(code, state), response);
-        return "redirect:/api/music";
+        
+        // Header를 통해 redirect 경로 설정, RestController를 사용하기 때문에 일반적인 방법으로 redirect 안됨.
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/api/music"));
+
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @GetMapping("/login/kakao")
