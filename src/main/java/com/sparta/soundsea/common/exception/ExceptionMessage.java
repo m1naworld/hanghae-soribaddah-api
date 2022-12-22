@@ -16,7 +16,6 @@ public enum ExceptionMessage {
     INVALID_LOGINID_MSG(400,"유효하지 않은 ID 입니다."),
     INVALID_PASSWORD_MSG(400,"유효하지 않은 PW 입니다."),
 
-    // social User
     SOCIAL_LOGIN_ERROR_MSG(401, "카카오 소셜 로그인 오류입니다."),
 
     // JWT, OAuth
@@ -26,13 +25,10 @@ public enum ExceptionMessage {
     INVALID_AUTH_TOKEN(401,"권한이 없는 사용자 입니다"),
     REFRESH_TOKEN_NOT_FOUND_MSG(401, "로그아웃된 사용자입니다."),
 
-    // 403 access토큰 만료
     EXPIRATION_TOKEN(403, "Access Token이 만료되었습니다"),
 
-    // 404 해당음악게시글 없음
     MUSIC_NOT_FOUND(404, "해당 게시글을 찾을 수 없습니다."),
 
-    // 404 해당댓글 없음
     COMMENT_NOT_FOUND(404, "해당 댓글을 찾을 수 없습니다.");
 
     private final int statusCode;
