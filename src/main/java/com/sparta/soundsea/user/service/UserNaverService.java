@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @Service
@@ -36,11 +37,19 @@ public class UserNaverService {
         String accessToken = jwtUtil.createAccessToken(naverUser.getLoginId(), naverUser.getRole());
         String refreshToken = jwtUtil.createRefreshToken();
 
-        // 4. Token 발급
-        response.addHeader(JwtUtil.AUTHORIZATION_ACCESS, accessToken);
-        response.addHeader(JwtUtil.AUTHORIZATION_REFRESH, refreshToken);
-
         // 4. 발급된 Token DB에 저장
         naverUser.updateToken(accessToken, refreshToken);
+
+        // 5. Cookie 객체 생성 및 브라우저에 Set
+        Cookie accessCookie = new Cookie(JwtUtil.AUTHORIZATION_ACCESS, accessToken.substring(7));
+        Cookie refreshCookie = new Cookie(JwtUtil.AUTHORIZATION_REFRESH, refreshToken.substring(7));
+
+        // 5-1. 웹어플리케이션의 모든 URL 범위에서 Cookie 전송
+        accessCookie.setPath("/");
+        refreshCookie.setPath("/");
+
+        // 5-2. Response에 쿠키 추가
+        response.addCookie(accessCookie);
+        response.addCookie(refreshCookie);
     }
 }

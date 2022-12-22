@@ -34,8 +34,8 @@ public class UserController {
     }
 
     @GetMapping("/login/naver/callback")
-    public Response naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
+    public String naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
         userNaverService.naverLogin(naverOauth.getLoginDtoFromNaver(code, state), response);
-        return new Response(LOGIN_USER_SUCCESS_MSG);
+        return "redirect:/api/music";
     }
 }
