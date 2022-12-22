@@ -43,11 +43,11 @@ public class UserController {
 
     @GetMapping("/login/naver/callback")
     public ResponseEntity<?> naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
-        userNaverService.naverLogin(naverOauth.getLoginDtoFromNaver(code, state), response);
-        
+        userService.OAuthLogin(naverOauth.getLoginDtoFromNaver(code, state), response);
+
         // Header를 통해 redirect 경로 설정, RestController를 사용하기 때문에 일반적인 방법으로 redirect 안됨.
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/api/music"));
+        headers.setLocation(URI.create("http://soribaddah.s3-website.ap-northeast-2.amazonaws.com/login"));
 
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
