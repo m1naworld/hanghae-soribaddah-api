@@ -4,6 +4,7 @@ import com.sparta.soundsea.common.response.Response;
 import com.sparta.soundsea.user.dto.OAuthLoginDto;
 import com.sparta.soundsea.user.dto.RequestLoginUserDto;
 import com.sparta.soundsea.user.dto.RequestSignUpUserDto;
+import com.sparta.soundsea.user.service.UserKakaoService;
 import com.sparta.soundsea.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import static com.sparta.soundsea.common.response.ResponseMessage.SIGNUP_USER_SU
 public class UserController {
     private final UserService userService;
     private final NaverOauth naverOauth;
+    private final UserKakaoService userKakaoService;
 
     @PostMapping("/signup")
     public Response signUp(@RequestBody RequestSignUpUserDto requestSignUpUserDto) {
@@ -35,6 +37,14 @@ public class UserController {
     @GetMapping("/login/naver/callback")
     public Response naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
         userService.OAuthLogin(naverOauth.getLoginDtoFromNaver(code, state), response);
+        return new Response(LOGIN_USER_SUCCESS_MSG);
+    }
+
+    @GetMapping("/login/kakao")
+    public Response kakaoLogin(@RequestParam String code, HttpServletResponse response) {
+        String kakaoAccessToken = userKakaoService.getKakaoAccessToken(code);
+        OAuthLoginDto kakao= userKakaoService.createKakaoUser(kakaoAccessToken);
+        userService.OAuthLogin(kakao, response);
         return new Response(LOGIN_USER_SUCCESS_MSG);
     }
 }
