@@ -62,9 +62,7 @@ public class UserKakaoService {
             int responseCode = conn.getResponseCode();
             log.info("KakaoAccessToken-ResponseCode : " + responseCode);
 
-            //요청을 통해 얻은 JSON타입의 Response 메세지
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            // Json 파싱
             JsonElement element = getResponseJson(br);
 
             access_Token = element.getAsJsonObject().get("access_token").getAsString();
@@ -92,7 +90,7 @@ public class UserKakaoService {
 
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
-            conn.setRequestProperty("Authorization", "Bearer " + token); //전송할 header 작성, access_token 전송
+            conn.setRequestProperty("Authorization", "Bearer " + token);
 
             int responseCode = conn.getResponseCode();
             log.info("create-KakaoUser-responseCode : " + responseCode);
