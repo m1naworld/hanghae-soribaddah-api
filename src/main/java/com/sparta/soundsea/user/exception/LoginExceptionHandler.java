@@ -25,4 +25,10 @@ public class LoginExceptionHandler {
     public ExceptionResponse handleBadRequest(Exception e){
         return new ExceptionResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value());
     }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(RuntimeException.class)
+    public ExceptionResponse handleSocialError(Exception e){
+        return new ExceptionResponse(e.getMessage(),HttpStatus.UNAUTHORIZED.value());
+    }
 }
