@@ -107,7 +107,7 @@ public class MusicService {
         );
 
         if (oneMusic.getUser().getId().equals(userId)) {
-            oneMusic.updateContents(requestDto.getContents());
+            oneMusic.updateMusic(requestDto);
         } else {
             throw new IllegalArgumentException(INVALID_AUTH_TOKEN.getMsg());
         }

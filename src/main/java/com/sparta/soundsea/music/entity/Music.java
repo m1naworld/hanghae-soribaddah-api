@@ -2,6 +2,7 @@ package com.sparta.soundsea.music.entity;
 
 import com.sparta.soundsea.comment.entity.Comment;
 import com.sparta.soundsea.common.entity.Timestamped;
+import com.sparta.soundsea.music.dto.RequestCreateMusic;
 import com.sparta.soundsea.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,7 +48,11 @@ public class Music extends Timestamped {
     }
 
 
-    public void updateContents(String contents) {
-        this.contents = contents;
+    public void updateMusic(RequestCreateMusic requestDto) {
+
+        this.title = requestDto.getTitle();
+        this.contents = requestDto.getContents();
+        this.artist = requestDto.getArtist();
+        this.image = requestDto.getImage();
     }
 }
