@@ -19,8 +19,9 @@ public class CommentExceptionHandler {
         return new ExceptionResponse(e.getMessage(), HttpStatus.NOT_FOUND.value());
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(IllegalArgumentException.class)
-    public ExceptionResponse handlerBadRequest(Exception e){
+    public ExceptionResponse handleForbidden(Exception e){
         return new ExceptionResponse(e.getMessage(), HttpStatus.FORBIDDEN.value());
     }
 
