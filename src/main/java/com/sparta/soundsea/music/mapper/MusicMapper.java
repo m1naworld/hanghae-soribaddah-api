@@ -25,7 +25,6 @@ public class MusicMapper {
                 .image(music.getImage())
                 .createdAt(music.getCreatedAt())
                 .modifiedAt(music.getLastModifiedAt())
-//                .commentList(music.getComments())
                 .build();
     }
 
