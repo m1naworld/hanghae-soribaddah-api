@@ -5,7 +5,6 @@ import com.sparta.soundsea.user.dto.OAuthLoginDto;
 import com.sparta.soundsea.user.dto.RequestLoginUserDto;
 import com.sparta.soundsea.user.dto.RequestSignUpUserDto;
 import com.sparta.soundsea.user.service.UserKakaoService;
-import com.sparta.soundsea.user.service.UserNaverService;
 import com.sparta.soundsea.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +25,6 @@ import static com.sparta.soundsea.common.response.ResponseMessage.SIGNUP_USER_SU
 public class UserController {
     private final UserService userService;
     private final NaverOauth naverOauth;
-    private final UserNaverService userNaverService;
     private final UserKakaoService userKakaoService;
 
     @PostMapping("/signup")

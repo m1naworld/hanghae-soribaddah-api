@@ -31,12 +31,6 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring().
-//                requestMatchers(PathRequest.toH2Console()); // H2 콘솔 관련된 Path 예외 설정
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // 1. CSRF(Cross-site request forgery) 비활성화 설정 및 cors 설정
