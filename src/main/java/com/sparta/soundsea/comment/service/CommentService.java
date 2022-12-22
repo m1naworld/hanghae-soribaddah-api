@@ -31,7 +31,7 @@ public class CommentService {
 
     //댓글 생성
     @Transactional
-    public CommentResponseDto createComment(Long userId, Long musicId, CommentRequestDto requestDto) {
+    public void createComment(Long userId, Long musicId, CommentRequestDto requestDto) {
 
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NullPointerException(USER_NOT_FOUND_ERROR_MSG.getMsg()));
@@ -45,7 +45,7 @@ public class CommentService {
        //일치할 시 저장
         commentRepository.save(comment);
 
-        return commentMapper.toResponse(comment);
+        commentMapper.toResponse(comment);
 
     }
 
@@ -74,7 +74,6 @@ public class CommentService {
         //일치할 시 수정
         String updateComment = requestDto.getContents();
         comment.update(updateComment);
-//        commentMapper.toResponse(comment);
 
     }
 

@@ -19,7 +19,6 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    //댓글 작성
     @PostMapping()
     public Response createComment(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long musicId, @RequestBody CommentRequestDto requestDto) {
         Long userId = userDetails.getUser().getId();
@@ -30,11 +29,9 @@ public class CommentController {
         }
         commentService.createComment(userId, musicId, requestDto);
 
-
         return new Response(COMMENT_CREATE_SUCCESS_MSG);
     }
 
-    //댓글 수정
     @PatchMapping("/{commentId}")
     public Response updateComment(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long commentId, @PathVariable Long musicId, @RequestBody CommentRequestDto requestDto){
         Long userId = userDetails.getUser().getId();
@@ -46,12 +43,9 @@ public class CommentController {
         }
         commentService.updateComment(userId, commentId, musicId, requestDto);
 
-
-
         return new Response(COMMENT_UPDATE_SUCCESS_MSG);
     }
 
-    //댓글 삭제
     @DeleteMapping("/{commentId}")
     public Response deleteComment(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long commentId){
         Long userId = userDetails.getUser().getId();
@@ -61,7 +55,6 @@ public class CommentController {
             throw new IllegalArgumentException(TOKEN_NOT_FOUND_MSG.getMsg());
         }
         commentService.deleteComment(commentId, userId);
-
 
         return new Response(COMMENT_DELETE_SUCCESS_MSG);
     }
